@@ -1,0 +1,181 @@
+```{r include=FALSE, warning=FALSE, message=FALSE}
+# Stop the R code from displaying
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 320, out.width = "100%")
+
+# Load packages
+library(extrafont)
+library(ggforce)
+
+# Source Animal Services data subsets
+# Note that this also loads tidyverse and lubridate packages
+source("scripts/ems.R")
+
+# Set base theme for plots
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "Segoe UI"),
+                  axis.title = element_blank(),
+                  panel.grid.major = element_line(color = "black", linetype = "dotted"),
+                  panel.background = element_blank()))
+```
+
+# Emergency Services {#ems}
+
+Guilford County Emergency Services strives to provide the highest standards of service to
+everyone who lives, works or visits the County in the areas of Fire and Life Safety Services,
+Emergency Medical Services (EMS), Emergency Management, Fire Inspections and
+Investigations, and Fire/Hazardous Materials response. Additionally, the Department operates a
+Public Safety
+Maintain safe and secure communities through strategically coordinated and
+professional public safety services.
+133
+self-contained Fleet Maintenance Facility to assure that all vehicles and equipment in the various
+divisions are available for immediate response to the maximum extent possible.
+
+## Monthly Call Volume {#emsmonthlycallvolume}
+
+How many calls does EMS answer each month?
+
+```{r}
+tile.set.1 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.1$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -500, size = 3.5)
+```
+
+## Yearly Call Volume {#emsyearlycallvolume}
+
+How many calls do we receive each fiscal year?
+
+```{r}
+tile.set.5 %>%
+  ggplot(aes(fiscal_year, n)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(n)), nudge_y = -5000, size = 3.5)
+```
+
+## Overall Average Response Time {#emsoverallavgresp}
+
+This is the overall average response time for all calls and priorities.
+
+```{r}
+overall_avg_resp %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresponse, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresponse/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(overall_avg_resp$avgresponse), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -50, size = 3)
+```
+
+## Priority Breakdown {-}
+
+## Imminent Life Threat
+
+Goal is to arrive in under 9 minutes, 90% of the time.
+
+## Imminent Life Threat Call Count {#emsimcallcount}
+
+```{r}
+tile.set.2 %>%
+  filter(priority == "Imminent Life Threat") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.2, priority == "Imminent Life Threat")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -10, size = 3.5)
+```
+
+## Imminenet Life Threat Average Response Time {#emsimavgresp}
+
+```{r}
+tile.set.4 %>%
+  filter(priority == "Imminent Life Threat") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresponse, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresponse/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.4, priority == "Imminent Life Threat")$avgresponse), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -50, size = 3)
+```
+
+## Imminenet Life Threat Percent Under {#emsimpercunder}
+
+What percent of the time did we arrive in under 9 minutes?
+
+```{r}
+tile.set.11 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, percentunder)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.11$percentunder), color = "#bb5232") +
+  geom_label(aes(label = scales::percent(percentunder, scale = 1, accuracy = 2)), nudge_y = -5, size = 3.5)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

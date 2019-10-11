@@ -1,0 +1,41 @@
+--- 
+title: "GuilStat Performance Management"
+subtitle: "Guilford County Operational Metrics"
+author:
+  name: Guilford County Government
+  email: budget@guilfordcountync.gov
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: krantz
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "This is a preliminary draft of a performance management framework for Guilford County Government"
+---
+
+# Welcome {-}
+
+# Introduction {-}
+
+This space would be reserved for a full introduction to the performance management framework and the connection to the strategy framework.
+
+Term definitions should also be provided.
+
+# Term Definitions {-}
+
+# Process {-}
+
+# Document Overview {-}
+
+## Enterprise Operational Metrics {-}
+
+## Service Areas {-}
+
+## Department Operational Metrics {-}
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```

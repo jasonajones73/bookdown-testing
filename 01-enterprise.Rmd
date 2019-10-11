@@ -1,0 +1,13 @@
+# Enterprise Metrics {#eoms}
+
+This section would be reserved for an overview of Enterprise Operational Metrics.
+
+## Dollars Spent on Overtime
+
+## Overtime Hours Paid
+
+## Hours Not Worked
+
+## Hours Lost Due to Work Related Illness and Injury
+
+## Lost Time Injury Rate

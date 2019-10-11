@@ -1,0 +1,207 @@
+```{r include=FALSE, warning=FALSE, message=FALSE}
+# Stop the R code from displaying
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 320, out.width = "100%")
+
+# Load packages
+library(extrafont)
+
+# Source Animal Services data subsets
+# Note that this also loads tidyverse and lubridate packages
+source("scripts/animal_control.R")
+
+# Set base theme for plots
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "Segoe UI"),
+                  axis.title = element_blank(),
+                  panel.grid.major = element_line(color = "black", linetype = "dotted"),
+                  panel.background = element_blank()))
+```
+
+# Animal Services {#animalservices}
+
+Guilford County Animal Services is responsible for general animal control, regulation and enforcement of animal-related ordinances in the County as well as preventing the occurrence and spread of rabies. Animals that are lost and/or seized are secured and cared for at the Animal Shelter while Animal Control manages rabies prevention programs, responds to vicious animals and animal cruelty, issues warrants and citations to violators, and seizes animals from owners found in violation.
+
+## Monthly Call Volume
+
+How many calls do we receive each month?
+
+```{r}
+tile.set.2 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.2$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -100, size = 3.5)
+```
+
+
+## Overall Average Response Time
+
+What's our average response time for all calls? Our CAD systems tracks this in seconds so this metric is displayed in seconds.
+
+```{r}
+tile.set.4 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.4$avgresp), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -100, size = 3)
+```
+
+## Average Response Time by Jurisdiction
+
+What is our average response time broken down by jurisdiction for the most recent month of available data?
+
+```{r}
+tile.set.5 %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(reorder(jurisdiction, seconds), seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.5$avgresp), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -200, size = 3) +
+  coord_flip()
+```
+
+## Average Response Time by Day
+
+What is our average response time broken down by day of the week for the most recent month of available data?
+
+```{r}
+tile.set.13 %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calldow, avgresp)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.13$avgresp), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -200, size = 3)
+```
+
+## Priority Breakdown {-}
+
+Now we will break the calls down into priority designations.
+
+## First Priority Call Volume
+
+```{r}
+tile.set.15 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(priority == "First") %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.15, priority == "First")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -30, size = 3.5)
+```
+
+## First Priority Average Response Time
+
+Average response time against our established 30 minute target.
+
+```{r}
+tile.set.14 %>%
+  filter(priority == "First") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = 1800, color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -200, size = 3)
+```
+
+## Second Priority Call Volume
+
+```{r}
+tile.set.15 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(priority == "Second") %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.15, priority == "Second")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -20, size = 3.5)
+```
+
+## Second Priority Average Response Time
+
+Average response time against our established 60 minute target (not shown).
+
+```{r}
+tile.set.14 %>%
+  filter(priority == "Second") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -200, size = 3)
+```
+
+## Third Priority Call Volume
+
+```{r}
+tile.set.15 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(priority == "Third") %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.15, priority == "Third")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -20, size = 3.5)
+```
+
+## Third Priority Average Response Time
+
+Average response time against our established 90 minute target (not shown).
+
+```{r}
+tile.set.14 %>%
+  filter(priority == "Third") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -200, size = 3)
+```
+
+## All Other Priority Call Volume
+
+```{r}
+tile.set.15 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(priority == "Other") %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.15, priority == "Other")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -50, size = 3.5)
+```
+
+## All Other Priority Average Response Time
+
+Average response time against our established 120 minute target (not shown).
+
+```{r}
+tile.set.14 %>%
+  filter(priority == "Other") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresp, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresp/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -150, size = 3)
+```
+
+

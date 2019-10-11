@@ -3,6 +3,8 @@ bookdown::gitbook:
   css: style.css
   config:
     toc:
+      collapse: subsection
+      scroll_highlight: yes
       before: |
         <li><a href="./">GuilStat Performance Management</a></li>
       after: |

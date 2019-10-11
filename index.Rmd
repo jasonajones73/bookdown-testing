@@ -36,6 +36,6 @@ Term definitions should also be provided.
 ```{r include=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+  .packages(), 'bookdown', 'knitr', 'rmarkdown', 'tidyverse', 'lubridate'
 ), 'packages.bib')
 ```

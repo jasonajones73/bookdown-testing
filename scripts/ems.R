@@ -18,6 +18,8 @@ ems <- read_csv(here::here("data/callsWithJurisdictions.csv"),
   filter(str_detect(closecode, "[:alpha:]") == FALSE) %>%
   filter(str_detect(primeunit, "MA") == FALSE)
 
+population <- read_csv(here::here("data/population.csv"))
+
 ems <- ems %>%
   mutate(fiscal_year = case_when(
     month(calltime) < 7 ~ year(calltime),
@@ -73,6 +75,12 @@ tile.set.5 <- ems %>%
   )) %>%
   group_by(fiscal_year) %>%
   count()
+
+## Calls Per Person
+per_person <- tile.set.5 %>%
+  left_join(population, by = c("fiscal_year" = "year")) %>%
+  mutate(per_person = round(estimate/n, digits = 2))
+  
 
 ## SUBSET 6
 tile.set.6 <- ems %>%

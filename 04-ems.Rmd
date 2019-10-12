@@ -4,7 +4,6 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 320,
 
 # Load packages
 library(extrafont)
-library(ggforce)
 
 # Source Animal Services data subsets
 # Note that this also loads tidyverse and lubridate packages
@@ -20,16 +19,10 @@ theme_set(theme_minimal() +
 
 # Emergency Services {#ems}
 
-Guilford County Emergency Services strives to provide the highest standards of service to
-everyone who lives, works or visits the County in the areas of Fire and Life Safety Services,
-Emergency Medical Services (EMS), Emergency Management, Fire Inspections and
-Investigations, and Fire/Hazardous Materials response. Additionally, the Department operates a
-Public Safety
-Maintain safe and secure communities through strategically coordinated and
-professional public safety services.
-133
-self-contained Fleet Maintenance Facility to assure that all vehicles and equipment in the various
-divisions are available for immediate response to the maximum extent possible.
+![](images/public_safety.png)
+
+Guilford County Emergency Services strives to provide the highest standards of service to everyone who lives, works or visits the County in the areas of Fire and Life Safety Services, Emergency Medical Services (EMS), Emergency Management, Fire Inspections and Investigations, and Fire/Hazardous Materials response. Additionally, the Department operates a Public Safety Maintain safe and secure communities through strategically coordinated and
+professional public safety services. 133 self-contained Fleet Maintenance Facility to assure that all vehicles and equipment in the various divisions are available for immediate response to the maximum extent possible.
 
 ## Monthly Call Volume {#emsmonthlycallvolume}
 
@@ -42,7 +35,7 @@ tile.set.1 %>%
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(tile.set.1$callcount), color = "#bb5232") +
-  geom_label(aes(label = scales::comma(callcount)), nudge_y = -500, size = 3.5)
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -500, size = 3)
 ```
 
 ## Yearly Call Volume {#emsyearlycallvolume}
@@ -54,8 +47,22 @@ tile.set.5 %>%
   ggplot(aes(fiscal_year, n)) +
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
-  geom_label(aes(label = scales::comma(n)), nudge_y = -5000, size = 3.5)
+  geom_label(aes(label = scales::comma(n)), nudge_y = -5000, size = 3)
 ```
+
+## Yearly Call Volume Per Person {#emsvolumeperperson}
+
+Per person call volume estimates are based on NC OSBM population estimates/projections.
+
+```{r}
+per_person %>%
+  filter(fiscal_year != ifelse(year(Sys.Date()) < 7, year(Sys.Date()), year(Sys.Date()) + 1)) %>%
+  ggplot(aes(fiscal_year, per_person)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = per_person), nudge_y = -1, size = 3)
+```
+
 
 ## Overall Average Response Time {#emsoverallavgresp}
 
@@ -70,12 +77,12 @@ overall_avg_resp %>%
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(overall_avg_resp$avgresponse), color = "#bb5232") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -50, size = 3)
+  geom_label(aes(label = label), nudge_y = -50, size = 2.75)
 ```
 
-## Priority Breakdown {-}
+## Priority Breakdown {-#emsprioritybreakdown}
 
-## Imminent Life Threat
+## Imminent Life Threat {#emsimminent}
 
 Goal is to arrive in under 9 minutes, 90% of the time.
 

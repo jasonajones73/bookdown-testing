@@ -13,25 +13,25 @@ link-citations: yes
 description: "This is a preliminary draft of a performance management framework for Guilford County Government"
 ---
 
-# Welcome {-}
+# Welcome {-#welcome}
 
-# Introduction {-}
+# Introduction {-#introduction}
 
 This space would be reserved for a full introduction to the performance management framework and the connection to the strategy framework.
 
 Term definitions should also be provided.
 
-# Term Definitions {-}
+# Term Definitions {-#termdefs}
 
-# Process {-}
+# Process {-#process}
 
-# Document Overview {-}
+# Document Overview {-#docoverview}
 
-## Enterprise Operational Metrics {-}
+## Enterprise Operational Metrics {-#eoms}
 
-## Service Areas {-}
+## Service Areas {-#serviceareas}
 
-## Department Operational Metrics {-}
+## Department Operational Metrics {-#doms}
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages

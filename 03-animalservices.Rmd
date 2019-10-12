@@ -19,6 +19,10 @@ theme_set(theme_minimal() +
 
 # Animal Services {#animalservices}
 
+![](images/public_safety.png)
+
+![](images/healthy_people.png)
+
 Guilford County Animal Services is responsible for general animal control, regulation and enforcement of animal-related ordinances in the County as well as preventing the occurrence and spread of rabies. Animals that are lost and/or seized are secured and cared for at the Animal Shelter while Animal Control manages rabies prevention programs, responds to vicious animals and animal cruelty, issues warrants and citations to violators, and seizes animals from owners found in violation.
 
 ## Monthly Call Volume
@@ -32,7 +36,7 @@ tile.set.2 %>%
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(tile.set.2$callcount), color = "#bb5232") +
-  geom_label(aes(label = scales::comma(callcount)), nudge_y = -100, size = 3.5)
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -100, size = 3)
 ```
 
 
@@ -49,7 +53,7 @@ tile.set.4 %>%
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(tile.set.4$avgresp), color = "#bb5232") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -100, size = 3)
+  geom_label(aes(label = label), nudge_y = -100, size = 2.75)
 ```
 
 ## Average Response Time by Jurisdiction
@@ -64,7 +68,7 @@ tile.set.5 %>%
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(tile.set.5$avgresp), color = "#bb5232") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -200, size = 3) +
+  geom_label(aes(label = label), nudge_y = -200, size = 2.75) +
   coord_flip()
 ```
 
@@ -80,14 +84,14 @@ tile.set.13 %>%
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(tile.set.13$avgresp), color = "#bb5232") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -200, size = 3)
+  geom_label(aes(label = label), nudge_y = -200, size = 2.75)
 ```
 
-## Priority Breakdown {-}
+## Priority Breakdown {-#acoprioritybreakdown}
 
 Now we will break the calls down into priority designations.
 
-## First Priority Call Volume
+## First Priority Call Volume {#acofirstvolume}
 
 ```{r}
 tile.set.15 %>%
@@ -97,10 +101,10 @@ tile.set.15 %>%
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(filter(tile.set.15, priority == "First")$callcount), color = "#bb5232") +
-  geom_label(aes(label = scales::comma(callcount)), nudge_y = -30, size = 3.5)
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -30, size = 3)
 ```
 
-## First Priority Average Response Time
+## First Priority Average Response Time {#acofirstavgresp}
 
 Average response time against our established 30 minute target.
 
@@ -114,10 +118,10 @@ tile.set.14 %>%
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = 1800, color = "#bb5232") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -200, size = 3)
+  geom_label(aes(label = label), nudge_y = -200, size = 2.75)
 ```
 
-## Second Priority Call Volume
+## Second Priority Call Volume {#acosecondvolume}
 
 ```{r}
 tile.set.15 %>%
@@ -127,10 +131,10 @@ tile.set.15 %>%
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(filter(tile.set.15, priority == "Second")$callcount), color = "#bb5232") +
-  geom_label(aes(label = scales::comma(callcount)), nudge_y = -20, size = 3.5)
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -20, size = 3)
 ```
 
-## Second Priority Average Response Time
+## Second Priority Average Response Time {#acosecondavgresp}
 
 Average response time against our established 60 minute target (not shown).
 
@@ -143,10 +147,10 @@ tile.set.14 %>%
   ggplot(aes(calltime, seconds)) +
   geom_col(fill = "#1d4c94") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -200, size = 3)
+  geom_label(aes(label = label), nudge_y = -200, size = 2.75)
 ```
 
-## Third Priority Call Volume
+## Third Priority Call Volume {#acothirdvolume}
 
 ```{r}
 tile.set.15 %>%
@@ -156,10 +160,10 @@ tile.set.15 %>%
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(filter(tile.set.15, priority == "Third")$callcount), color = "#bb5232") +
-  geom_label(aes(label = scales::comma(callcount)), nudge_y = -20, size = 3.5)
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -20, size = 3)
 ```
 
-## Third Priority Average Response Time
+## Third Priority Average Response Time {#acothirdavgresp}
 
 Average response time against our established 90 minute target (not shown).
 
@@ -172,10 +176,10 @@ tile.set.14 %>%
   ggplot(aes(calltime, seconds)) +
   geom_col(fill = "#1d4c94") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -200, size = 3)
+  geom_label(aes(label = label), nudge_y = -200, size = 2.75)
 ```
 
-## All Other Priority Call Volume
+## All Other Priority Call Volume {#acoothervolume}
 
 ```{r}
 tile.set.15 %>%
@@ -185,10 +189,10 @@ tile.set.15 %>%
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
   geom_hline(yintercept = mean(filter(tile.set.15, priority == "Other")$callcount), color = "#bb5232") +
-  geom_label(aes(label = scales::comma(callcount)), nudge_y = -50, size = 3.5)
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -50, size = 3)
 ```
 
-## All Other Priority Average Response Time
+## All Other Priority Average Response Time {#acootheravgresp}
 
 Average response time against our established 120 minute target (not shown).
 
@@ -201,7 +205,7 @@ tile.set.14 %>%
   ggplot(aes(calltime, seconds)) +
   geom_col(fill = "#1d4c94") +
   scale_y_time() +
-  geom_label(aes(label = label), nudge_y = -150, size = 3)
+  geom_label(aes(label = label), nudge_y = -150, size = 2.75)
 ```
 
 

@@ -131,7 +131,7 @@ tile.set.11 %>%
 
 ## Life Threat {#emslife}
 
-Goal is to arrive in under 9 minutes, 90% of the time.
+Goal is to arrive in under 11 minutes, 90% of the time.
 
 ## Life Threat Call Count {#emslifecallcount}
 
@@ -163,7 +163,7 @@ tile.set.4 %>%
 
 ## Life Threat Percent Under {#emslifepercunder}
 
-What percent of the time did we arrive in under 9 minutes?
+What percent of the time did we arrive in under 11 minutes?
 
 ```{r}
 tile.set.12 %>%
@@ -177,7 +177,7 @@ tile.set.12 %>%
 
 ## Potential Life Threat {#emspotential}
 
-Goal is to arrive in under 9 minutes, 90% of the time.
+Goal is to arrive in under 13 minutes, 90% of the time.
 
 ## Potential Life Threat Call Count {#emspotcallcount}
 
@@ -209,7 +209,7 @@ tile.set.4 %>%
 
 ## Potential Life Threat Percent Under {#emspotpercunder}
 
-What percent of the time did we arrive in under 9 minutes?
+What percent of the time did we arrive in under 13 minutes?
 
 ```{r}
 tile.set.13 %>%

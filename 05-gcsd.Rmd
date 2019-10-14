@@ -1,0 +1,134 @@
+```{r include=FALSE, warning=FALSE, message=FALSE}
+# Stop the R code from displaying
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 320, out.width = "100%")
+
+# Load packages
+library(extrafont)
+
+# Source Animal Services data subsets
+# Note that this also loads tidyverse and lubridate packages
+source("scripts/gcsd.R")
+
+# Set base theme for plots
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "Segoe UI"),
+                  axis.title = element_blank(),
+                  panel.grid.major = element_line(color = "black", linetype = "dotted"),
+                  panel.background = element_blank()))
+```
+
+# Law Enforcement {#le}
+
+![](images/public_safety.png)
+
+The Guilford County Sheriff’s Office consists of the Operations Bureau including the Legal Services Division, Court Services Bureau, and the Administrative Services Bureau.
+
+The Operations Bureau is responsible for the law enforcement functions of the department and the School Resource Officers Program. Sworn officers with the Sheriff’s Office have jurisdiction anywhere within the County, including all incorporated areas within the County limits. Officers within Field Operations are assigned to districts (District I – Summerfield; District II – McLeansville; and District III – Jamestown). Each District provides 24-hour patrol protection to the citizens of the County. The Criminal Investigation Section of each district handles all follow-up on crimes and the prosecution of suspects through the court system.
+
+The Operations Bureau also includes the Legal Process Division which is responsible for the service of all Civil Processes within Guilford County and partners with the county’s Family Justice Centers in Greensboro and High Point to provide services for those affected by domestic violence and family crisis.
+
+The Court Services Bureau is comprised of the two Detention Facilities, Bailiff Sections in Greensboro & High Point, and Transportation. This bureau is responsible for the safety and security of inmates during housing, court, and transport, while providing for a safer community. 
+
+The Administrative Bureau is responsible for budget, purchasing, grants and contracts, fleet, IT, HR, Special Projects, and many other administrative functions of the Department. The Administrative offices are recognized as the information center for citizens to contact when seeking information or have questions regarding services.
+
+## Monthly Call Volume {#lemonthlycallvolume}
+
+How many calls does Law Enforcement answer each month?
+
+```{r}
+tile.set.3 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, n)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.3$n), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(n)), nudge_y = -100, size = 3)
+```
+
+## Yearly Call Volume {#leyearlycallvolume}
+
+How many calls do we receive each fiscal year?
+
+```{r}
+per_year %>%
+  ggplot(aes(fiscal_year, call_count)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(call_count)), nudge_y = -1500, size = 3)
+```
+
+## Yearly Call Volume Per Thousand {#levolumeperthousand}
+
+Per one thousand population call volume estimates are based on NC OSBM population estimates/projections.
+
+```{r}
+per_person %>%
+  filter(fiscal_year != ifelse(year(Sys.Date()) < 7, year(Sys.Date()), year(Sys.Date()) + 1)) %>%
+  mutate(label = paste(per_person, "\n", "per", "\n", "1,000 People")) %>%
+  ggplot(aes(fiscal_year, per_person)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = label), size = 2.75, nudge_y = -5)
+```
+
+## Overall Average Response Time {#leoverallavgresp}
+
+This is the overall average response time for all calls and priorities.
+
+```{r}
+overall_avg_resp %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(label = round(seconds_to_period(avgresponse))) %>%
+  ggplot(aes(calltime, label)) +
+  geom_col(fill = "#1d4c94") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -50, size = 2)
+```
+
+## Priority Breakdown {-#leprioritybreakdown}
+
+## Highest Priority Call Volume {#levolumehigh}
+
+```{r}
+tile.set.2 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(priority == "Highest Priority") %>%
+  ggplot(aes(calltime, n)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(n)), nudge_y = -2, size = 3)
+```
+
+
+## All Other Priority Call Volume {#levolumeother}
+
+```{r}
+tile.set.2 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(priority == "All Other") %>%
+  ggplot(aes(calltime, n)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(n)), nudge_y = -100, size = 3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

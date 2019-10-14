@@ -79,7 +79,7 @@ tile.set.5 <- ems %>%
 ## Calls Per Person
 per_person <- tile.set.5 %>%
   left_join(population, by = c("fiscal_year" = "year")) %>%
-  mutate(per_person = round(estimate/n, digits = 2))
+  mutate(per_person = round(n/(estimate/1000), digits = 2))
   
 
 ## SUBSET 6

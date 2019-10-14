@@ -50,17 +50,18 @@ tile.set.5 %>%
   geom_label(aes(label = scales::comma(n)), nudge_y = -5000, size = 3)
 ```
 
-## Yearly Call Volume Per Person {#emsvolumeperperson}
+## Yearly Call Volume Per Thousand {#emsvolumeperthousand}
 
-Per person call volume estimates are based on NC OSBM population estimates/projections.
+Per one thousand population call volume estimates are based on NC OSBM population estimates/projections.
 
 ```{r}
 per_person %>%
   filter(fiscal_year != ifelse(year(Sys.Date()) < 7, year(Sys.Date()), year(Sys.Date()) + 1)) %>%
+  mutate(label = paste(per_person, "\n", "per", "\n", "1,000 People")) %>%
   ggplot(aes(fiscal_year, per_person)) +
   scale_y_continuous(labels = scales::comma_format()) +
   geom_col(fill = "#1d4c94") +
-  geom_label(aes(label = per_person), nudge_y = -1, size = 3)
+  geom_label(aes(label = label), size = 2.75, nudge_y = -15)
 ```
 
 
@@ -128,61 +129,95 @@ tile.set.11 %>%
   geom_label(aes(label = scales::percent(percentunder, scale = 1, accuracy = 2)), nudge_y = -5, size = 3.5)
 ```
 
+## Life Threat {#emslife}
 
+Goal is to arrive in under 9 minutes, 90% of the time.
 
+## Life Threat Call Count {#emslifecallcount}
 
+```{r}
+tile.set.2 %>%
+  filter(priority == "Life Threat") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.2, priority == "Life Threat")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -100, size = 3)
+```
 
+## Life Threat Average Response Time {#emslifeavgresp}
 
+```{r}
+tile.set.4 %>%
+  filter(priority == "Life Threat") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresponse, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresponse/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.4, priority == "Life Threat")$avgresponse), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -50, size = 3)
+```
 
+## Life Threat Percent Under {#emslifepercunder}
 
+What percent of the time did we arrive in under 9 minutes?
 
+```{r}
+tile.set.12 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, percentunder)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.12$percentunder), color = "#bb5232") +
+  geom_label(aes(label = scales::percent(percentunder, scale = 1, accuracy = 2)), nudge_y = -5, size = 3.5)
+```
 
+## Potential Life Threat {#emspotential}
 
+Goal is to arrive in under 9 minutes, 90% of the time.
 
+## Potential Life Threat Call Count {#emspotcallcount}
 
+```{r}
+tile.set.2 %>%
+  filter(priority == "Potential Life Threat") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, callcount)) +
+  scale_y_continuous(labels = scales::comma_format()) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.2, priority == "Potential Life Threat")$callcount), color = "#bb5232") +
+  geom_label(aes(label = scales::comma(callcount)), nudge_y = -100, size = 3.5)
+```
 
+## Potential Life Threat Average Response Time {#emspotavgresp}
 
+```{r}
+tile.set.4 %>%
+  filter(priority == "Potential Life Threat") %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  mutate(seconds = as.difftime(avgresponse, units = "secs")) %>%
+  mutate(label = paste(as.character(round(avgresponse/60, digits = 2)), "\n", "min.")) %>%
+  ggplot(aes(calltime, seconds)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(filter(tile.set.4, priority == "Potential Life Threat")$avgresponse), color = "#bb5232") +
+  scale_y_time() +
+  geom_label(aes(label = label), nudge_y = -50, size = 3)
+```
 
+## Potential Life Threat Percent Under {#emspotpercunder}
 
+What percent of the time did we arrive in under 9 minutes?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+tile.set.13 %>%
+  filter(calltime >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  ggplot(aes(calltime, percentunder)) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  geom_col(fill = "#1d4c94") +
+  geom_hline(yintercept = mean(tile.set.13$percentunder), color = "#bb5232") +
+  geom_label(aes(label = scales::percent(percentunder, scale = 1, accuracy = 2)), nudge_y = -5, size = 3.5)
+```
 

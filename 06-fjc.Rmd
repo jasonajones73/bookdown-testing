@@ -1,0 +1,133 @@
+```{r include=FALSE, warning=FALSE, message=FALSE}
+# Stop the R code from displaying
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, dpi = 320, out.width = "100%")
+
+# Load packages
+library(extrafont)
+library(lubridate)
+
+# Source Animal Services data subsets
+# Note that this also loads tidyverse and lubridate packages
+source("scripts/fjc.R")
+
+# Set base theme for plots
+theme_set(theme_minimal() +
+            theme(text = element_text(family = "Segoe UI"),
+                  axis.title = element_blank(),
+                  panel.grid.major = element_line(color = "black", linetype = "dotted"),
+                  panel.background = element_blank()))
+```
+
+# Family Justice Center {#fjc}
+
+![](images/public_safety.png)
+
+![](images/healthy_people.png)
+
+The Guilford County Family Justice Center (FJC) is a collaborative of local government and community-based partners working together under one roof to provide victims of domestic violence, sexual assault, child abuse, and elder abuse a safe and secure place to receive assistance and access services.
+
+The vision and mission of the Center is to protect the vulnerable, stop the violence, restore hope, and make our community safer by empowering family violence victims to live free from violence and abuse and holding offenders accountable by providing easily accessible, coordinated, and comprehensive services in a single location.
+
+This goal is facilitated by local government entities, agencies, organizations and community members across the County who provide consolidated and coordinated legal, social, and health services to families in crisis.
+
+## New and Returning Clients {#fjcnewret}
+
+```{r}
+fjc_all %>%
+  filter(Date >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  group_by(Date, `New Client?`) %>%
+  summarise(total = n()) %>%
+  ungroup() %>%
+  ggplot(aes(Date, total, fill = `New Client?`)) +
+  geom_col() +
+  scale_fill_manual("Client Type", values = c("#1d4c94", "#f7b538"),
+                    labels = c("Returning", "New")) +
+  geom_text(aes(label = total), nudge_y = c(145, -40), color = "white") +
+  theme(legend.position = "bottom")
+```
+
+## Children and Companions {#fjcdhildcomp}
+
+Companion counts by month
+
+```{r}
+fjc_all %>%
+  filter(Date >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  group_by(Date) %>%
+  summarise(children = sum(`# of Children`, na.rm = TRUE), companions = sum(companion_count, na.rm = TRUE)) %>%
+  ungroup() %>%
+  ggplot(aes(Date, companions)) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(companions)), nudge_y = -20, size = 3)
+```
+
+Children counts by month
+
+```{r}
+fjc_all %>%
+  filter(Date >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  group_by(Date) %>%
+  summarise(children = sum(`# of Children`, na.rm = TRUE), companions = sum(companion_count, na.rm = TRUE)) %>%
+  ungroup() %>%
+  ggplot(aes(Date, children)) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(children)), nudge_y = -10, size = 3)
+```
+
+## Domestic Violence/Abuse Clients {#fjcdvclients}
+
+Domestic Violence/Abuse Clients for the Greensboro office.
+
+```{r}
+dva <- fjc_client_type %>%
+  filter(date >= (floor_date(Sys.Date() - 365, unit = "1 month"))) %>%
+  filter(type == "Domestic Violence/Abuse") %>%
+  group_by(date, `Office Location`) %>%
+  summarise(total = n()) %>%
+  ungroup()
+
+dva %>%
+  filter(`Office Location` == "GSO") %>%
+  ggplot((aes(date, total))) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(total)), nudge_y = -25, size = 3)
+```
+
+Domestic Violence/Abuse Clients for the High Point office.
+
+```{r}
+dva %>%
+  filter(`Office Location` == "HP") %>%
+  ggplot((aes(date, total))) +
+  geom_col(fill = "#1d4c94") +
+  geom_label(aes(label = scales::comma(total)), nudge_y = -10, size = 3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
